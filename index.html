@@ -1,2 +1,60 @@
-test
-copy
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-ico" href="images/logo.png"/>
+    <title>index</title>
+    <script src="js/axios.min.js"></script>
+    <script src="js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 引入组件库 -->
+    <script src="js/index.js"></script>
+
+    <script>
+        var goChat = function () {
+            window.location.href = "chat.html"
+        }
+        var goM = function () {
+            window.location.href = "morseCode.html";
+        }
+        var goGK = function () {
+            window.location.href = "gk.html";
+        }
+        var goChatGpt = function () {
+            window.location.href = "chatgpt.html";
+        }
+
+        var goLogin = function () {
+            window.location.href = "login.html";
+        }
+
+        var goDisk = function () {
+            window.location.href = "disk.html";
+        }
+    </script>
+</head>
+<body>
+    <div id="app">
+        <el-button type="success" onclick="goM()">MorseCode</el-button>
+        <el-button type="primary" onclick="goChatGpt()">ChatGPT</el-button>
+        <el-button type="success" onclick="goGK()">GK</el-button>
+        <el-button type="primary" onclick="goChat()">Chat</el-button>
+        <el-button type="success" onclick="goLogin()">Login</el-button>
+        <el-button type="primary" onclick="goDisk()">Disk</el-button>
+    </div>
+    <script>
+        new Vue({
+            el:"#app",
+            data :{
+            },
+            methods: {
+
+            }
+        })
+    </script>
+</body>
+</html>
+

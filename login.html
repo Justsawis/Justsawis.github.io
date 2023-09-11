@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+
+    .container {
+      max-width: 300px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .container input[type="text"],
+    .container input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    .container input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .container input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+  <script src="js/axios.min.js"></script>
+  <script src="js/vue.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="css/index.css">
+  <!-- 引入组件库 -->
+  <script src="js/index.js"></script>
+  <script>
+    var goRegister = function () {
+      window.location.href = "register.html";
+    }
+  </script>
+</head>
+<body>
+  <div id="app" class="container">
+    <form>
+      <h2>login</h2>
+      <input type="text" v-model="userId" placeholder="id" required>
+      <input type="password" v-model="password" placeholder="password" required>
+      <el-button type="success" @click="login">login</el-button>
+      <el-button type="primary" onclick="goRegister()">register</el-button>
+    </form>
+  </div>
+  <script>
+    new Vue({
+      el:"#app",
+      data :{
+        userId:'',
+        password:''
+      },
+      methods: {
+        login:function () {
+          var user = {
+            "userId":this.userId,
+            "password":this.password,
+          };
+          axios.post('/login',user)
+            .then(function (response) {
+              console.log(response);
+              alert(response.data);
+              if (response.data === "ok"){
+                window.location.href="index.html"
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+      }
+    })
+  </script>
+</body>
+</html>

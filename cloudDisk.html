@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/axios.min.js"></script>
+    <script src="js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 引入组件库 -->
+    <script src="js/index.js"></script>
+</head>
+<body>
+    <template v-for="file in list">
+        <el-button type="success" class="message">{{file}}</el-button><br/>
+    </template>
+    <script>
+        new Vue({
+            el:"#app",
+            data :{
+                list:[]
+            },
+            methods: {
+                created(){
+                    this.getList();
+                },
+                getList:function () {
+                    var that = this;
+                    axios.post('/getDisk')
+                        .then(function (response) {
+                            console.log(response);
+                            if (!response.data.login){
+                                window.location.href="login.html"
+                            }
+                            that.list = response.data.list;
+                            that.inputId = response.data.user.userId;
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+            }
+        })
+    </script>
+</body>
+</html>

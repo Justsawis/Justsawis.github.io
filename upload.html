@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>upload</title>
+    <script src="js/axios.min.js"></script>
+    <script src="js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 引入组件库 -->
+    <script src="js/index.js"></script>
+</head>
+<body>
+<div id="app">
+  <!--<el-upload
+          class="upload-demo"
+          drag
+          action="/testFile"
+          multiple>
+    <i class="el-icon-upload"></i>
+    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+  </el-upload>-->
+    <!--<form action="/testFile" method="POST" enctype="multipart/form-data">
+
+        <input type="file" name="file">
+        <input type="submit" value="上传">
+    </form>-->
+    <input type="file" @change="handleUpload" ref="fileInput">
+</div>
+<script>
+    new Vue({
+      el:"#app",
+      data :{
+      },
+      methods: {
+        handleUpload(){
+          const formData = new FormData();
+          const file = this.$refs.fileInput.files[0];
+          console.log(file);
+          formData.append ('file', file);
+          formData.append ('fileName', file.name);
+          axios.post('/addDisk', formData)
+          .then (response => {
+              if (!response.data.login){
+                  window.location.href="login.html"
+              }
+              console.log('成功');
+          })
+          .catch (error => {
+              console.error('上传失败:',error);
+          });
+        }
+      }
+    })
+  </script>
+</body>
+</html>

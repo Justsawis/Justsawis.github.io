@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解密</title>
+    <script src="js/axios.min.js"></script>
+    <script src="js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 引入组件库 -->
+    <script src="js/index.js"></script>
+    <script>
+        var goI = function () {
+            window.location.href = "index.html";
+        }
+    </script>
+
+</head>
+<body>
+    <div id="app">
+        <el-row>
+            <el-col :span="12">
+                <el-input type="text" v-model="txt" placeholder="请输入摩斯密码">
+            </el-col>
+            <el-col :span="12">
+                <el-button type="success" @click="deCode">解密</el-button>
+            </el-col>
+        </el-row>
+
+
+        <div>{{code}}</div>
+        <el-button onclick="goI()">主页</el-button>
+    </div>
+    <script>
+        new Vue({
+            el:"#app",
+            data :{
+                txt:"",
+                code:""
+            },
+            methods: {
+                deCode:function(){
+                    var p = new RegExp("[._/]");
+                    let r = p.test(this.txt);
+                    if (!r){
+                        alert("只能输入.和_和/");
+                        return false;
+                    }
+
+                    var that = this;
+                    axios.post('/decryptMorseCode', that.txt)
+                    .then(function (response) {
+                        console.log(response);
+                        that.code = response.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                }
+            }
+        })
+    </script>
+</body>
+</html>

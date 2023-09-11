@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>chat</title>
+    <script src="js/axios.min.js"></script>
+    <script src="js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 引入组件库 -->
+    <script src="js/index.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        .message span {
+            font-weight: bold;
+        }
+
+        .input-box input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .input-box input[type="submit"] {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .input-box input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <template v-for="chat in list">
+            <el-tag type="success" class="message">{{chat.userId}}:{{chat.content}}</el-tag><br/>
+        </template>
+        <div style="margin-top: 15px;">
+            <h2>id:{{inputId}}</h2>
+            <el-input v-model="inputToId" placeholder="发给谁"></el-input>
+            <el-input placeholder="请输入内容" v-model="inputChat" class="input-with-select">
+                <el-button slot="append" @click="send" icon="el-icon-check"></el-button>
+            </el-input>
+
+        </div>
+    </div>
+    <style>
+        .el-select .el-input {
+            width: 130px;
+        }
+        .input-with-select .el-input-group__prepend {
+            background-color: #fff;
+        }
+    </style>
+
+    <script>
+        new Vue({
+            el:"#app",
+            data :{
+                list:[],
+                inputChat:'',
+                inputId:'',
+                inputToId:''
+            },
+            created(){
+                //var userId = this.getQueryString("userId");
+                this.getList();
+                this.setTime();
+            },
+            methods: {
+
+                getQueryString:function(name){
+                    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                    var r = window.location.search.substr(1).match(reg);
+                    if (r != null) return unescape(r[2]);
+                    return null;
+                },
+                setTime(){
+                    //每隔一分钟运行一次保存方法
+                    this.timer = setInterval(()=>{
+                        this.getList();
+                    },10000)
+                },
+                getList:function () {
+                    var that = this;
+                    axios.post('/getChat')
+                        .then(function (response) {
+                            console.log(response);
+
+                            if (!response.data.login){
+                                window.location.href="login.html"
+                            }
+                            that.list = response.data.list;
+                            that.inputId = response.data.user.userId;
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                send:function(){
+                    var that = this;
+                    var chat = {
+                        "userId":this.inputId,
+                        "toUserId":this.inputToId,
+                        "content":this.inputChat
+                    };
+
+                    axios.post('/addChat',chat)
+                    .then(function (response) {
+                        console.log(response);
+                        that.list = response.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                }
+            }
+        })
+    </script>
+</body>
+</html>

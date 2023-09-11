@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>chat</title>
+    <script src="js/axios.min.js"></script>
+    <script src="js/vue.js"></script>
+
+</head>
+<body>
+
+<div id="app">
+    <span>api_key:</span>
+    <input type="text" v-model="api_key"/>
+    </br>
+    <span>prompt:</span>
+    <input type="text" v-model="prompt"/>
+    <br>
+    <span>model:</span>
+    <input type="text" v-model="model"/>
+    <br>
+    <button id="find" @click="find">find</button>
+    <div>
+        {{message}}
+    </div>
+</div>
+
+<script>
+
+    new Vue({
+        el: "#app",
+        data: {
+            api_key:'',
+            prompt:'',
+            model:'',
+            message:''
+        },
+        methods: {
+            test:function(){
+                console.log(1111);
+            },
+            find: function (){
+                that=this
+                var chatGPT={};
+                chatGPT.api_key=this.api_key;
+                chatGPT.prompt=this.prompt;
+                if(this.model!=='') {
+                    chatGPT.model=this.model;
+                }
+
+                axios.post('/chat', chatGPT)
+                .then(function (response) {
+                    console.log("response=",response);
+                    that.message = response.data.choices[0].message.content;
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container input[type="text"],
+        .container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .container input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .container input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script src="js/axios.min.js"></script>
+    <script src="js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 引入组件库 -->
+    <script src="js/index.js"></script>
+    <script>
+        var goLogin = function () {
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+<body>
+<div id="app" class="container">
+    <form>
+        <h2>register</h2>
+        <input type="text" v-model="userName" placeholder="name" required>
+        <input type="password" v-model="password" placeholder="password" required>
+        <input type="password" v-model="verify" placeholder="verify" required>
+        <input type="text" v-model="userPhone" placeholder="phone" required>
+        <input type="text" v-model="userEmail" placeholder="userEmail" required>
+        <el-button type="primary" @click="register">register</el-button>
+        <el-button type="success" onclick="goLogin()">login</el-button>
+    </form>
+</div>
+<script>
+    new Vue({
+        el:"#app",
+        data :{
+            userName:'',
+            password:'',
+            verify:'',
+            userPhone:'',
+            userEmail:''
+        },
+        methods: {
+            register:function () {
+                if (this.password === this.verify){
+                    var user = {
+                        "userName":this.userName,
+                        "password":this.password,
+                        "userPhone":this.userPhone,
+                        "userEmail":this.userEmail
+                    };
+                    axios.post('/register',user)
+                        .then(function (response) {
+                            console.log(response);
+                            alert(response.data);
+                            if (response.data === "ok"){
+                                window.location.href="login.html";
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }else {
+                    alert('password!=verify');
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>
